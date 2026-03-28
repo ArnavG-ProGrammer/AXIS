@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AXIS — B2B Partnerships, Reimagined</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0a;
+    --surface: #111111;
+    --border: #1f1f1f;
+    --amber: #f5a623;
+    --amber-dim: #c47d0e;
+    --text: #e8e2d9;
+    --muted: #6b6560;
+    --grid: rgba(245, 166, 35, 0.04);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Grid background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Ambient glow */
+  body::after {
+    content: '';
+    position: fixed;
+    top: -20%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 800px;
+    height: 500px;
+    background: radial-gradient(ellipse, rgba(245,166,35,0.08) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 24px 48px;
+    border-bottom: 1px solid var(--border);
+    background: rgba(10,10,10,0.8);
+    backdrop-filter: blur(12px);
+  }
+
+  .logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    letter-spacing: 6px;
+    color: var(--amber);
+  }
+
+  .nav-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    border: 1px solid var(--border);
+    padding: 6px 14px;
+    border-radius: 2px;
+  }
+
+  /* HERO */
+  .hero {
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 120px 24px 80px;
+  }
+
+  .eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 4px;
+    color: var(--amber);
+    text-transform: uppercase;
+    margin-bottom: 32px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.2s forwards;
+  }
+
+  .eyebrow::before, .eyebrow::after {
+    content: '—';
+    margin: 0 12px;
+    color: var(--muted);
+  }
+
+  h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(72px, 12vw, 160px);
+    line-height: 0.9;
+    letter-spacing: 2px;
+    color: var(--text);
+    margin-bottom: 8px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.4s forwards;
+  }
+
+  h1 span {
+    color: var(--amber);
+    display: block;
+  }
+
+  .subtitle {
+    font-size: 16px;
+    font-weight: 300;
+    color: var(--muted);
+    max-width: 480px;
+    line-height: 1.7;
+    margin: 32px auto 56px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.6s forwards;
+  }
+
+  /* FORM */
+  .waitlist-form {
+    display: flex;
+    gap: 0;
+    max-width: 480px;
+    width: 100%;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.8s forwards;
+  }
+
+  .waitlist-form input {
+    flex: 1;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-right: none;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    padding: 16px 20px;
+    outline: none;
+    transition: border-color 0.2s;
+    border-radius: 2px 0 0 2px;
+  }
+
+  .waitlist-form input::placeholder { color: var(--muted); }
+  .waitlist-form input:focus { border-color: var(--amber); }
+
+  .waitlist-form button {
+    background: var(--amber);
+    color: #000;
+    border: none;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 16px 28px;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+    border-radius: 0 2px 2px 0;
+    white-space: nowrap;
+  }
+
+  .waitlist-form button:hover { background: #f0b84a; }
+  .waitlist-form button:active { transform: scale(0.98); }
+
+  .success-msg {
+    display: none;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--amber);
+    letter-spacing: 2px;
+    margin-top: 16px;
+    text-transform: uppercase;
+  }
+
+  .counter {
+    margin-top: 24px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 1px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 1s forwards;
+  }
+
+  .counter span {
+    color: var(--text);
+    font-weight: 500;
+  }
+
+  /* FEATURES */
+  .features {
+    position: relative;
+    z-index: 1;
+    padding: 80px 48px 120px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .features-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 4px;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 48px;
+    text-align: center;
+  }
+
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+  }
+
+  .feature {
+    background: var(--bg);
+    padding: 40px 32px;
+    transition: background 0.2s;
+  }
+
+  .feature:hover { background: var(--surface); }
+
+  .feature-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 48px;
+    color: var(--border);
+    line-height: 1;
+    margin-bottom: 20px;
+    transition: color 0.2s;
+  }
+
+  .feature:hover .feature-num { color: var(--amber); }
+
+  .feature h3 {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 10px;
+    letter-spacing: 0.5px;
+  }
+
+  .feature p {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.7;
+    font-weight: 300;
+  }
+
+  /* TICKER */
+  .ticker-wrap {
+    position: relative;
+    z-index: 1;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    overflow: hidden;
+    padding: 14px 0;
+    margin-bottom: 0;
+  }
+
+  .ticker {
+    display: flex;
+    gap: 64px;
+    animation: ticker 20s linear infinite;
+    white-space: nowrap;
+  }
+
+  .ticker-item {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: var(--muted);
+    text-transform: uppercase;
+    flex-shrink: 0;
+  }
+
+  .ticker-item span {
+    color: var(--amber);
+    margin-right: 64px;
+  }
+
+  /* FOOTER */
+  footer {
+    position: relative;
+    z-index: 1;
+    border-top: 1px solid var(--border);
+    padding: 32px 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  footer .logo { font-size: 20px; letter-spacing: 5px; }
+
+  footer p {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 1px;
+  }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes ticker {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    nav { padding: 20px 24px; }
+    .features { padding: 60px 24px 80px; }
+    .features-grid { grid-template-columns: 1fr; }
+    .waitlist-form { flex-direction: column; }
+    .waitlist-form input { border-right: 1px solid var(--border); border-bottom: none; border-radius: 2px 2px 0 0; }
+    .waitlist-form button { border-radius: 0 0 2px 2px; }
+    footer { flex-direction: column; gap: 16px; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">AXIS</div>
+  <div class="nav-tag">Coming Soon</div>
+</nav>
+
+<section class="hero">
+  <p class="eyebrow">B2B Partnerships</p>
+  <h1>WHERE<br><span>COMPANIES</span>CONNECT</h1>
+  <p class="subtitle">The network built for business partnerships. Find your next co-founder, distributor, or strategic ally — without the noise.</p>
+
+  <form class="waitlist-form" onsubmit="handleSubmit(event)">
+    <input type="email" id="emailInput" placeholder="your@company.com" required />
+    <button type="submit">Join Waitlist</button>
+  </form>
+  <p class="success-msg" id="successMsg">✓ &nbsp; You're on the list</p>
+  <p class="counter">Already <span id="count">247</span> companies waiting</p>
+</section>
+
+<div class="ticker-wrap">
+  <div class="ticker">
+    <span class="ticker-item">Strategic Partnerships <span>✦</span></span>
+    <span class="ticker-item">B2B Networking <span>✦</span></span>
+    <span class="ticker-item">Deal Flow <span>✦</span></span>
+    <span class="ticker-item">Co-Founders <span>✦</span></span>
+    <span class="ticker-item">Distributors <span>✦</span></span>
+    <span class="ticker-item">Growth Allies <span>✦</span></span>
+    <span class="ticker-item">Strategic Partnerships <span>✦</span></span>
+    <span class="ticker-item">B2B Networking <span>✦</span></span>
+    <span class="ticker-item">Deal Flow <span>✦</span></span>
+    <span class="ticker-item">Co-Founders <span>✦</span></span>
+    <span class="ticker-item">Distributors <span>✦</span></span>
+    <span class="ticker-item">Growth Allies <span>✦</span></span>
+  </div>
+</div>
+
+<section class="features">
+  <p class="features-label">Why AXIS</p>
+  <div class="features-grid">
+    <div class="feature">
+      <div class="feature-num">01</div>
+      <h3>Partnership-First</h3>
+      <p>Built exclusively for company-to-company relationships. No individual profiles, no noise — just businesses finding the right allies.</p>
+    </div>
+    <div class="feature">
+      <div class="feature-num">02</div>
+      <h3>Intent Matching</h3>
+      <p>State what you're looking for. Distribution, investment, integration, or co-marketing — AXIS surfaces the right match.</p>
+    </div>
+    <div class="feature">
+      <div class="feature-num">03</div>
+      <h3>Deal Pipeline</h3>
+      <p>Track conversations, manage outreach, and close partnerships — all in one place without switching between 5 tools.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="logo">AXIS</div>
+  <p>© 2025 AXIS. All rights reserved.</p>
+</footer>
+
+<script>
+  function handleSubmit(e) {
+    e.preventDefault();
+    const input = document.getElementById('emailInput');
+    const form = document.querySelector('.waitlist-form');
+    const msg = document.getElementById('successMsg');
+    const count = document.getElementById('count');
+
+    form.style.display = 'none';
+    msg.style.display = 'block';
+    count.textContent = parseInt(count.textContent) + 1;
+  }
+</script>
+
+</body>
+</html>
